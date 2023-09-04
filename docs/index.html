@@ -1,0 +1,17 @@
+<html>
+   <body>
+      <img />
+   </body>
+   <script>
+      const imgElement = document.getElementsByTagName('img')[0];
+      fetch('https://api.github.com/repos/oliver-hrkltz/photos/git/trees/main')
+         .then((response) => response.json())
+         .then((object) => {
+            const imagePathArray = object.tree
+               .filter((treeElement) => treeElement.path.endsWith('.jpg'))
+               .map((treeElement) => treeElement.path);
+            const index = Math.floor(Math.random() * imagePathArray.length)
+            imgElement.src = `https://raw.githubusercontent.com/oliver-hrkltz/photos/main/${imagePathArray[index]}`;
+         });
+   </script>
+</html>
