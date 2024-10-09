@@ -30,12 +30,14 @@
    </head>
    <body>
       <div id="gallery">
-         <!-- <img data-src="image/org/IMG_1603.jpg" alt="Image 1" loading="lazy"> -->
-         <!-- Add more images as needed -->
+         <!-- The script will place the images here. -->
       </div>
    </body>
    <script>
       const galleryDiv = document.getElementById('gallery');
+      /// IMAGE_OBJECT...
+      const imageObject = {"CH": ["_DSC8888.webp"],"ES": ["_DSC8643","2023-03-04","19_32_10.webp","_DSC8690","2023-03-04","19_34_43.webp","_DSC8769","2023-03-04","19_33_28.webp","_DSC8815","2023-03-01","21_51_18.webp","_DSC8841.webp"],"FI": ["72CCDEAC-0A41-41BA-81E0-B753C0CCAD1A.webp","ADCD41E9-5D42-4BC4-B0EF-76E7A37DDECA.webp","PXL_20220118_124303964.webp","_DSC8253.webp","_DSC8265.webp","_DSC8299.webp","_DSC8464.webp","_DSC8549.webp","_DSC8550.webp","_DSC8551.webp"],"SE": ["PXL_20220705_162617565.MP.webp"],"US": ["20230816-_DSC9084-Enhanced-NR.webp"]};
+      /// ...IMAGE_OBJECT
 
       // Event listener for back/forward button navigation
       window.onpopstate = function(event) {
@@ -43,7 +45,6 @@
          if (event.state) {
             switch (event.state.page) {
                case 1:
-                  //buildPage0();
                   buildPage1(event.state.countryCode);
                   break;
                case 2:
@@ -57,88 +58,37 @@
 
       buildPage0();
 
-      /*fetch('https://api.github.com/repos/oliver-hrkltz/photos/contents/data?ref=main')
-         .then((response) => response.json())
-         .then((object) => {
-            const imagePathArray = object
-               //.filter((treeElement) => treeElement.path.endsWith('.webp'))
-               .map((treeElement) => treeElement.name)
-               .map((countryCode) => {
-                  const imgElement = document.createElement("img");
-                  imgElement.alt = 'Random image';
-                  imgElement.loading = 'lazy';
-                  imgElement.src = `https://flagsapi.com/${countryCode}/flat/64.png`
-                  imgElement.onclick = function() {
-                     history.pushState({ page: 1 }, `${countryCode}`, null);
+      function buildPage0() {
+         galleryDiv.innerHTML = '';
 
-                     galleryDiv.innerHTML = '';
-                     fetch(`https://api.github.com/repos/oliver-hrkltz/photos/contents/data/${countryCode}?ref=main`)
-                        .then((response) => response.json())
-                        .then((object) => {
-                           const imagePathArray = object
-                              .filter((treeElement) => treeElement.path.endsWith('.webp'))
-                              .map((treeElement) => treeElement.name)
-                              .map((name) => {
-                                 const imgElement = document.createElement("img");
-                                 imgElement.alt = 'Random image';
-                                 imgElement.loading = 'lazy';
-                                 imgElement.src = `https://media.githubusercontent.com/media/oliver-hrkltz/photos/refs/heads/main/data/${countryCode}/${name}`;
-                                 imgElement.onclick = function() {
-                                    history.pushState({ page: 2 }, `${countryCode}/${name}`, null);
-                                    // TODO: Open picture in full screen.
-                                 }
-                                 galleryDiv.appendChild(imgElement);
-                              });
-                        });
-                  }
-                  galleryDiv.appendChild(imgElement);
-               });
-         });*/
+         Object.keys(imageObject).forEach((countryCode) => {
+            const imgElement = document.createElement("img");
+            imgElement.alt = 'Random image';
+            imgElement.loading = 'lazy';
+            imgElement.src = `https://flagsapi.com/${countryCode}/flat/64.png`
+            imgElement.onclick = function() {
+               history.pushState({ page: 1, countryCode: countryCode }, null);
+               buildPage1(countryCode);
+            }
+            galleryDiv.appendChild(imgElement);
+         });
+      }
 
-         function buildPage0() {
-            galleryDiv.innerHTML = '';
-            fetch('https://api.github.com/repos/oliver-hrkltz/photos/contents/data?ref=main')
-               .then((response) => response.json())
-               .then((object) => {
-                  const imagePathArray = object
-                     //.filter((treeElement) => treeElement.path.endsWith('.webp'))
-                     .map((treeElement) => treeElement.name)
-                     .map((countryCode) => {
-                        const imgElement = document.createElement("img");
-                        imgElement.alt = 'Random image';
-                        imgElement.loading = 'lazy';
-                        imgElement.src = `https://flagsapi.com/${countryCode}/flat/64.png`
-                        imgElement.onclick = function() {
-                           console.log('pushState');
-                           history.pushState({ 'page': 1, 'countryCode': countryCode }, null);
-                           buildPage1(countryCode);
-                        }
-                        galleryDiv.appendChild(imgElement);
-                     });
-               });
-         }
 
-         function buildPage1(countryCode) {
-            galleryDiv.innerHTML = '';
-            fetch(`https://api.github.com/repos/oliver-hrkltz/photos/contents/data/${countryCode}?ref=main`)
-               .then((response) => response.json())
-               .then((object) => {
-                  const imagePathArray = object
-                     .filter((treeElement) => treeElement.path.endsWith('.webp'))
-                     .map((treeElement) => treeElement.name)
-                     .map((name) => {
-                        const imgElement = document.createElement("img");
-                        imgElement.alt = 'Random image';
-                        imgElement.loading = 'lazy';
-                        imgElement.src = `https://media.githubusercontent.com/media/oliver-hrkltz/photos/refs/heads/main/data/${countryCode}/${name}`;
-                        imgElement.onclick = function() {
-                           //console.log('pushState');
-                           //history.pushState({ page: 2 }, `${countryCode}/${name}`, null);
-                           // TODO: Open picture in full screen.
-                        }
-                        galleryDiv.appendChild(imgElement);
-                     });
-               });
-         }
+      function buildPage1(countryCode) {
+         galleryDiv.innerHTML = '';
+
+         imageObject[countryCode].forEach((fileName) => {
+            const imgElement = document.createElement("img");
+            imgElement.alt = 'Random image';
+            imgElement.loading = 'lazy';
+            imgElement.src = `https://incredible-trifle-d84e58.netlify.app/.netlify/images?url=data/${countryCode}/${fileName}&w=128`
+            imgElement.onclick = function() {
+               history.pushState({ page: 1, countryCode: countryCode }, null);
+               buildPage1(countryCode);
+            }
+            galleryDiv.appendChild(imgElement);
+         });
+      }
    </script>
 </html>
