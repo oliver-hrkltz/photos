@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Stack Custom Function</title>
+</head>
+<body>
+
+    <button onclick="goToPage1()">Go to Page 1</button>
+    <button onclick="goToPage2()">Go to Page 2</button>
+
+    <div id="content">
+        <p>Welcome to the homepage</p>
+    </div>
+
+    <script>
+        // Function to update the content and push to history
+        function goToPage1() {
+            document.getElementById('content').innerHTML = '<p>Welcome to Page 1</p>';
+            history.pushState({ page: 1 }, 'Page 1', null)//'#page1');
+        }
+
+        function goToPage2() {
+            document.getElementById('content').innerHTML = '<p>Welcome to Page 2</p>';
+            history.pushState({ page: 2 }, 'Page 2', null)//'#page2');
+        }
+
+        // Event listener for back/forward button navigation
+        window.onpopstate = function(event) {
+            console.log(event);
+            if (event.state) {
+                if (event.state.page === 1) {
+                    document.getElementById('content').innerHTML = '<p>Welcome to Page 1</p>';
+                } else if (event.state.page === 2) {
+                    document.getElementById('content').innerHTML = '<p>Welcome to Page 2</p>';
+                }
+            } else {
+                // Handle the default state (homepage)
+                document.getElementById('content').innerHTML = '<p>Welcome to the homepage</p>';
+            }
+        };
+    </script>
+
+</body>
+</html>
